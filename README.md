@@ -68,7 +68,7 @@ BankLedger/
 - SERIALIZABLE isolation increases transaction abort rate under high concurrency — acceptable for a demo, needs tuning for production.
 - Credentials hardcoded in DBConnection.java — use environment variables in any real deployment.
 
-## 8. Interview Quick Reference
+## 8. Quick Questions
 
 **Q: What is ACID and where is each property in your code?**  
 A: ACID represents the core pillars of relational database transactions. **Atomicity** ensures all operations within a transaction succeed or fail together, implemented in `BankService.java` → `transfer()` where any error during transfer rolls back the entire set of SQL operations. **Consistency** keeps the database state valid, implemented via PostgreSQL check constraints in `schema.sql` and manual fund checks in `AccountRepository.java` → `debit()`. **Isolation** prevents concurrent transactions from causing anomalies, implemented in `DBConnection.java` → `get()` by setting the isolation level to `TRANSACTION_SERIALIZABLE`. **Durability** guarantees that committed data persists, which is handled by PostgreSQL write-ahead logs and the Docker pgdata volume specified in `docker-compose.yml`.
