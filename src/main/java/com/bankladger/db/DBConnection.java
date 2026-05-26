@@ -1,8 +1,11 @@
 package com.bankladger.db;
 
+import java.io.InputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
 
@@ -24,10 +27,21 @@ public class DBConnection {
             }
         }
         if (connection == null || closed) {
+            Properties props = new Properties();
+            try (InputStream input = DBConnection.class
+                    .getClassLoader()
+                    .getResourceAsStream("config.properties")) {
+                if (input == null) {
+                    throw new RuntimeException("config.properties not found in classpath");
+                }
+                props.load(input);
+            } catch (IOException e) {
+                throw new SQLException("Failed to load database configuration", e);
+            }
             connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/bankladger",
-                "postgres",
-                "postgres"
+                props.getProperty("db.url"),
+                props.getProperty("db.user"),
+                props.getProperty("db.password")
             );
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);

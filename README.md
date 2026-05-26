@@ -66,7 +66,7 @@ BankLedger/
 - CLI only — no REST API layer.
 - No unit tests — ACID properties verified through manual end-to-end testing.
 - SERIALIZABLE isolation increases transaction abort rate under high concurrency — acceptable for a demo, needs tuning for production.
-- Credentials hardcoded in DBConnection.java — use environment variables in any real deployment.
+- Database credentials managed in config.properties (excluded via .gitignore) — config.properties.example provided as a template.
 
 ## 8. Quick Questions
 
